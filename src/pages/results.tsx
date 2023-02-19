@@ -12,9 +12,13 @@ const ResultsPage: React.FC<{
         10 Most Roundest Pokemons
       </h2>
       <div className="flex flex-col">
-        {props.pokemons.map((pokemon, idx) => (
-          <PokemonVoted key={idx} pokemon={pokemon} />
-        ))}
+        {props.pokemons
+          .sort(
+            (a, b) => getPercentageOfVotesFor(b) - getPercentageOfVotesFor(a)
+          )
+          .map((pokemon, idx) => (
+            <PokemonVoted key={idx} pokemon={pokemon} />
+          ))}
       </div>
     </div>
   );
@@ -26,7 +30,7 @@ const PokemonVoted = ({ pokemon }: { pokemon: PokemonQueryResult[number] }) => (
     <strong className="capitalize">{pokemon.name} </strong>
     <p>
       ({pokemon.votesFor}/{pokemon.votesAgainst + ") "}
-       {getPercentageOfVotesFor(pokemon)}% roundest
+      {getPercentageOfVotesFor(pokemon).toFixed(2)}% roundest
     </p>
   </div>
 );
