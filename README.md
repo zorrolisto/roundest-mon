@@ -13,3 +13,11 @@ yarn dev
 # or
 pnpm dev
 ```
+
+
+
+//connect to the database
+pscale connect roundest-mon roundest-mon-dev --port 3309
+
+//like "git commit and push" but for prisma
+npx prisma migrate dev
