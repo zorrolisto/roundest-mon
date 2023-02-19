@@ -15,6 +15,16 @@ model Vote {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  votedFor     Int
+  votedFor       Int
   votedAgainst Int
+}
+
+model Pokemon {
+  id Int @id
+
+  name   String
+  sprite String
+
+  votesFor     Int
+  votesAgainst Int
 }

@@ -10,14 +10,12 @@ export const appRouter = router({
         id: z.number(),
       })
     )
-    .query(async ({ input }) => {
-      const api = new PokemonClient();
-      const pokemon = await api.getPokemonById(input.id);
-      return {
-        id: pokemon.id,
-        name: pokemon.name,
-        sprite: String(pokemon.sprites.front_default),
-      };
+    .query(async ({ input: { id } }) => {
+      //const api = new PokemonClient();
+      //const pokemon = await api.getPokemonById(input.id);
+      const pokemon = await prisma.pokemon.findFirst({ where: { id } });
+      if (!pokemon) throw new Error("Pokemon not found");
+      return pokemon;
     }),
   ["cast-vote"]: procedure
     .input(
