@@ -3,6 +3,9 @@ import { getOptionForVote } from "@/utils/getRandomPokemon";
 import { trpc } from "@/utils/trpc";
 import { useState } from "react";
 
+const LoadingPokemon = () => (
+  <div className="py-16 my-1 px-6">Loading Pokemon</div>
+);
 export default function Home() {
   const [idsChoosed, updateChoosedIds] = useState(() => getOptionForVote());
   const firstPokemon = trpc["get-pokemon-by-id"].useQuery({
@@ -18,8 +21,6 @@ export default function Home() {
     !firstPokemon.data ||
     !secondPokemon.data;
 
-  if (pokemonsAreLoading) return null;
-
   const voteForRoundest = (selectedPokemonID: number) => {
     // todo: send vote to server
     updateChoosedIds(getOptionForVote());
@@ -31,15 +32,21 @@ export default function Home() {
         Click the most roundest pokemon
       </div>
       <div className="rounded p-8 flex justify-between items-center">
-        <PokemonOption
-          pokemon={firstPokemon.data}
-          voteForThisPokemon={() => voteForRoundest(firstPokemon.data.id)}
-        />
+        {pokemonsAreLoading && <LoadingPokemon />}
+        {!pokemonsAreLoading && (
+          <PokemonOption
+            pokemon={firstPokemon.data}
+            voteForThisPokemon={() => voteForRoundest(firstPokemon.data.id)}
+          />
+        )}
         <div className="p-6 text-xl">VS</div>
-        <PokemonOption
-          pokemon={secondPokemon.data}
-          voteForThisPokemon={() => voteForRoundest(firstPokemon.data.id)}
-        />
+        {pokemonsAreLoading && <LoadingPokemon />}
+        {!pokemonsAreLoading && (
+          <PokemonOption
+            pokemon={secondPokemon.data}
+            voteForThisPokemon={() => voteForRoundest(firstPokemon.data.id)}
+          />
+        )}
       </div>
     </div>
   );
