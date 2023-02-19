@@ -1,19 +1,10 @@
+import { LoadingPokemon } from "@/components/LoadingPokemon";
 import PokemonOption from "@/components/PokemonOption";
 import { getOptionForVote } from "@/utils/getRandomPokemon";
 import { trpc } from "@/utils/trpc";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-const LoadingPokemon = () => (
-  <div className="py-16 my-1 px-12">
-    <Image
-    alt="loading" 
-    width={36}
-    height={36}
-    src="loading.svg"  />
-  </div>
-);
 export default function Home() {
   const [idsChoosed, updateChoosedIds] = useState(() => getOptionForVote());
   const firstPokemon = trpc["get-pokemon-by-id"].useQuery({
