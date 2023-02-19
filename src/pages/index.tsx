@@ -1,39 +1,16 @@
+import PokemonOption from "@/components/PokemonOption";
 import { getOptionForVote } from "@/utils/getRandomPokemon";
 import { trpc } from "@/utils/trpc";
-import Image from "next/image";
+import { useState } from "react";
 
-type Pokemon = {
-  id: number;
-  sprite: string;
-  name: string;
-};
-
-function PokemonOption({
-  pokemon,
-  voteForThisPokemon,
-}: {
-  pokemon: Pokemon;
-  voteForThisPokemon: () => void;
-}) {
-  return (
-    <div
-      className="w-fit h-fit pb-3 flex flex-col justify-center items-center rounded-lg border-4 border-base-200 hover:bg-base-200 hover:cursor-pointer"
-      onClick={voteForThisPokemon}
-    >
-      <Image
-        src={String(pokemon.sprite)}
-        width={128}
-        height={128}
-        alt="a-pokemon"
-      />
-      <p className="text-xl capitalize mt-[-1.0rem]">{pokemon.name}</p>
-    </div>
-  );
-}
-
-export default function Home({ ids }: { ids: number[] }) {
-  const firstPokemon = trpc["get-pokemon-by-id"].useQuery({ id: ids[0] });
-  const secondPokemon = trpc["get-pokemon-by-id"].useQuery({ id: ids[1] });
+export default function Home() {
+  const [idsChoosed, updateChoosedIds] = useState(() => getOptionForVote());
+  const firstPokemon = trpc["get-pokemon-by-id"].useQuery({
+    id: idsChoosed[0],
+  });
+  const secondPokemon = trpc["get-pokemon-by-id"].useQuery({
+    id: idsChoosed[1],
+  });
 
   const pokemonsAreLoading =
     firstPokemon.isLoading ||
@@ -44,9 +21,8 @@ export default function Home({ ids }: { ids: number[] }) {
   if (pokemonsAreLoading) return null;
 
   const voteForRoundest = (selectedPokemonID: number) => {
-    console.log("selectedPokemonID")
-    console.log(selectedPokemonID)
-    // todo
+    // todo: send vote to server
+    updateChoosedIds(getOptionForVote());
   };
 
   return (
@@ -67,11 +43,4 @@ export default function Home({ ids }: { ids: number[] }) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const ids = getOptionForVote();
-  return {
-    props: { ids }, // will be passed to the page component as props
-  };
 }
