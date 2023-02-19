@@ -21,8 +21,13 @@ export default function Home() {
     !firstPokemon.data ||
     !secondPokemon.data;
 
+  const voteMutation = trpc["cast-vote"].useMutation();
+
   const voteForRoundest = (selectedPokemonID: number) => {
-    // todo: send vote to server
+    voteMutation.mutate({
+      votedFor: selectedPokemonID,
+      votedAgainst: idsChoosed.filter((id) => id !== selectedPokemonID)[0],
+    });
     updateChoosedIds(getOptionForVote());
   };
 

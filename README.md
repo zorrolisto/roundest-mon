@@ -21,3 +21,6 @@ pscale connect roundest-mon roundest-mon-dev --port 3309
 
 //like "git commit and push" but for prisma
 npx prisma migrate dev
+
+//to see prisma studio
+npx prisma studio

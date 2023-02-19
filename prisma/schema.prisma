@@ -18,3 +18,11 @@ model Vote {
   votedFor     Int
   votedAgainst Int
 }
+
+model NewVoteTest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  votedFor     Int
+  votedAgainst Int
+}
